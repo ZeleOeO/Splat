@@ -10,5 +10,8 @@ pub struct UserLoginRequest {
 pub struct UserRegisterRequest {
     pub username: String,
     pub password: String,
-    pub repeat_password: String
+    pub repeat_password: String,
+    pub email: Option<String>,
+    pub first_name: String,
+    pub last_name: String
 }

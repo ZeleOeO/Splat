@@ -6,6 +6,7 @@ pub enum AppError {
     DbError(DbErr),
     Unauthorized,
     NotFound,
+    ExpectationFailed(String),
 }
 
 impl IntoResponse for AppError {
@@ -14,6 +15,13 @@ impl IntoResponse for AppError {
             AppError::DbError(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()).into_response(),
             AppError::Unauthorized => (StatusCode::UNAUTHORIZED, "Unauthorized").into_response(),
             AppError::NotFound => (StatusCode::NOT_FOUND, "Not found").into_response(),
+            AppError::ExpectationFailed(err) => (StatusCode::BAD_REQUEST, err).into_response()
         }
+    }
+}
+
+impl From<DbErr> for AppError {
+    fn from(err: DbErr) -> Self {
+        AppError::DbError(err)
     }
 }

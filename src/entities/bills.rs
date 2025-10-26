@@ -9,7 +9,7 @@ pub struct Model {
     pub id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub creator_id: Option<i32>,
+    pub creator_id: i32,
     pub total_amount: i32,
     pub status: String,
     pub category: String,

@@ -16,7 +16,7 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(Bills::Id))
                     .col(string(Bills::Title))
                     .col(string_null(Bills::Description))
-                    .col(integer_null(Bills::CreatorId))
+                    .col(integer(Bills::CreatorId))
                     .col(integer(Bills::TotalAmount))
                     .col(string(Bills::Status))
                     .col(string(Bills::Category))

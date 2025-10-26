@@ -15,8 +15,11 @@ impl MigrationTrait for Migration {
                     .col(string(User::UserName))
                     .col(string(User::HashedPassword))
                     .col(string_null(User::Email))
-                    .col(integer(User::BillsCreated))
-                    .col(integer(User::BillsJoined))
+                    .col(string(User::FirstName))
+                    .col(string(User::LastName))
+                    .col(date_time(User::CreatedAt))
+                    .col(integer_null(User::BillsCreated))
+                    .col(integer_null(User::BillsJoined))
                     .to_owned(),
             )
             .await
@@ -34,8 +37,11 @@ pub enum User {
     Table,
     Id,
     UserName,
+    FirstName,
+    LastName,
     HashedPassword,
     Email,
+    CreatedAt,
     BillsCreated,
     BillsJoined
 }

@@ -10,8 +10,11 @@ pub struct Model {
     pub user_name: String,
     pub hashed_password: String,
     pub email: Option<String>,
-    pub bills_created: i32,
-    pub bills_joined: i32,
+    pub first_name: String,
+    pub last_name: String,
+    pub created_at: DateTime,
+    pub bills_created: Option<i32>,
+    pub bills_joined: Option<i32>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

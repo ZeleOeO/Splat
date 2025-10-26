@@ -4,7 +4,6 @@ use axum::{Json, extract::State, response::IntoResponse};
 use bcrypt::{DEFAULT_COST, hash, verify};
 use jsonwebtoken::errors::Error;
 use jsonwebtoken::{encode, decode, DecodingKey, EncodingKey, Header, Validation};
-use migration::ExprTrait;
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
@@ -12,6 +11,7 @@ use serde::{Deserialize, Serialize};
 use crate::dto::dto::*;
 use crate::entities::user::{self, ActiveModel as User};
 use crate::entities::user::Entity as UserDB;
+use crate::errors::error::AppError;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Claims {
@@ -63,18 +63,26 @@ pub fn decode_jwt(token: &str) -> Result<Claims, Error> {
 pub async fn register_user(
     State(db): State<DatabaseConnection>,
     Json(payload): Json<UserRegisterRequest>,
-) -> impl IntoResponse {
-    if !(payload.password == payload.repeat_password) {
-        return (StatusCode::EXPECTATION_FAILED, "Passwords don't match");
+) -> Result<impl IntoResponse, AppError> {
+    if payload.password != payload.repeat_password {
+        return Err(AppError::ExpectationFailed("Passwords don't match".into()));
     }
+
     let password_hash = hash_password(&payload.password);
-    let user = User {
+
+    let user =  User {
         user_name: Set(payload.username),
         hashed_password: Set(password_hash),
+        created_at: Set(chrono::Utc::now().naive_local()),
+        first_name: Set(payload.first_name),
+        last_name: Set(payload.last_name),
+        email: Set(payload.email),
         ..Default::default()
     };
-    user.insert(&db).await.unwrap();
-    (StatusCode::CREATED,  "User Created")
+
+    user.insert(&db).await?;
+
+    Ok((StatusCode::CREATED, "User Created"))
 }
 
 #[debug_handler]
