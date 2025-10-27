@@ -2,6 +2,8 @@ use axum::response::{IntoResponse, Response};
 use axum::http::StatusCode;
 use sea_orm::DbErr;
 
+use crate::dto::dto::ApiResponse;
+
 pub enum AppError {
     DbError(DbErr),
     Unauthorized,
@@ -12,10 +14,10 @@ pub enum AppError {
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         match self {
-            AppError::DbError(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()).into_response(),
-            AppError::Unauthorized => (StatusCode::UNAUTHORIZED, "Unauthorized").into_response(),
-            AppError::NotFound => (StatusCode::NOT_FOUND, "Not found").into_response(),
-            AppError::ExpectationFailed(err) => (StatusCode::BAD_REQUEST, err).into_response()
+            AppError::DbError(err) => ApiResponse::api_response(StatusCode::INTERNAL_SERVER_ERROR.as_u16(), &err.to_string(), None::<String>).into_response(),
+            AppError::Unauthorized => ApiResponse::api_response(StatusCode::UNAUTHORIZED.as_u16(), "Unauthorized", None::<String>).into_response(),
+            AppError::NotFound => ApiResponse::api_response(StatusCode::NOT_FOUND.as_u16(), "Url Not Found", None::<String>).into_response(),
+            AppError::ExpectationFailed(err) => ApiResponse::api_response(StatusCode::BAD_REQUEST.as_u16(), &err.to_string(), None::<String>).into_response()
         }
     }
 }
@@ -25,3 +27,4 @@ impl From<DbErr> for AppError {
         AppError::DbError(err)
     }
 }
+

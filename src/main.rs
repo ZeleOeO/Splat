@@ -10,6 +10,7 @@ mod dto;
 mod entities;
 mod errors;
 mod middleware;
+mod utils;
 
 #[tokio::main]
 async fn main() {
@@ -31,6 +32,6 @@ async fn main() {
 }
 
 #[axum::debug_handler]
-async fn welcome_user(auth: AuthUser, State(db): State<DatabaseConnection>) -> impl IntoResponse {
+async fn welcome_user(auth: AuthUser) -> impl IntoResponse {
     format!("Hello, user {}", auth.0)
 }

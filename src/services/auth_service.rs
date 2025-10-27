@@ -12,6 +12,7 @@ use crate::dto::dto::*;
 use crate::entities::user::{self, ActiveModel as User};
 use crate::entities::user::Entity as UserDB;
 use crate::errors::error::AppError;
+use crate::utils::mapper;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Claims {
@@ -80,9 +81,10 @@ pub async fn register_user(
         ..Default::default()
     };
 
-    user.insert(&db).await?;
+    // This is to prevent ownership being moved. Don't know if this is the right way to hold on
+    let saved_user = user.clone().insert(&db).await?;
 
-    Ok((StatusCode::CREATED, "User Created"))
+    Ok(ApiResponse::api_response(400, "User Created", Some(mapper::user_to_userdto(&saved_user))))
 }
 
 #[debug_handler]
@@ -98,9 +100,8 @@ pub async fn login_user(
     if let Some(user) = user {
         if verify_password(&payload.password, &user.hashed_password) {
             let token = create_jwt(user.id);
-            return (StatusCode::OK, token)
+            return ApiResponse::api_response(StatusCode::OK.as_u16(), "User Logged in", Some(token))
         }
     }
-
-    (StatusCode::UNAUTHORIZED, "Invalid Credentials".to_string())
+    ApiResponse::api_response(StatusCode::UNAUTHORIZED.as_u16(), "Invalid Credentials", None::<String>)
 }
