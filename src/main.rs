@@ -2,7 +2,7 @@ use axum::{extract::{ State}, response::{IntoResponse}, routing::{get, post}, Ro
 use sea_orm::DatabaseConnection;
 use tokio::net::TcpListener;
 
-use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::auth_service::{login_user, register_user}};
+use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, bills_service::create_bill}};
 
 mod db;
 mod services;
@@ -22,6 +22,7 @@ async fn main() {
     .route("/register", post(register_user))
     .route("/login", post(login_user))
     .route("/profile", get(welcome_user))
+    .route("/bills/new", post(create_bill))
     .with_state(db);
 
     let addr = "0.0.0.0:6000";

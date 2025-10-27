@@ -7,7 +7,7 @@ use jsonwebtoken::{decode, DecodingKey, Validation};
 use crate::{errors::error::AppError, services::auth_service::Claims};
 
 #[derive(Clone)]
-pub struct AuthUser(pub String);
+pub struct AuthUser(pub i32);
 
 impl<S> FromRequestParts<S> for AuthUser
 where

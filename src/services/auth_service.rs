@@ -15,7 +15,7 @@ use crate::errors::error::AppError;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Claims {
-    pub sub: String,
+    pub sub: i32,
     pub iss: usize,
     pub exp: usize,
 }
@@ -38,7 +38,7 @@ fn create_jwt(user_id: i32) -> String {
     let issued_at = chrono::Utc::now().timestamp() as usize;
 
     let claims = Claims {
-        sub: user_id.to_string(),
+        sub: user_id,
         iss: issued_at,
         exp: expiration,
     };
