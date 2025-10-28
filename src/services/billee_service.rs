@@ -28,14 +28,6 @@ pub async fn add_billee_to_bill(
         ..Default::default()
     };
 
-    if billee.clone().user_id.unwrap().is_some() {
-        let bills_user = UserBillsJoined {
-            user_id: Set(user_id.unwrap()),
-            bills_joined_id: Set(bill.id)
-        };
-        bills_user.insert(&db).await?;
-    }
-
     let saved_billee = billee.insert(&db).await?;
     Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Billee Added", Some(billee_to_billeedto(&saved_billee))))
 }
