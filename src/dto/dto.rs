@@ -1,31 +1,6 @@
 use axum::{Json, http::{StatusCode}, response::{IntoResponse, Response}};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
-pub struct UserLoginRequest {
-    pub username: String,
-    pub password: String,
-}
-
-#[derive(Deserialize)]
-pub struct UserRegisterRequest {
-    pub username: String,
-    pub password: String,
-    pub repeat_password: String,
-    pub email: Option<String>,
-    pub first_name: String,
-    pub last_name: String,
-}
-
-#[derive(Deserialize)]
-pub struct BillCreateRequest {
-    pub title: String,
-    pub description: Option<String>,
-    pub total_amount: i32,
-    pub category: String,
-    pub days_till_due: i64,
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiResponse<T> {
     status: u16,
@@ -52,6 +27,17 @@ pub struct BillsDTO {
     pub category: String,
     pub created_at: String,
     pub due_date: String
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BilleeDTO {
+    pub name: String,
+    pub percentage: i32,
+    pub amount_due: f64,
+    pub amount_paid: f64,
+    pub status: String,
+    pub user_id: Option<i32>,
+    pub bill_id: i32
 }
 
 impl<T> ApiResponse<T> {

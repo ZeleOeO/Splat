@@ -1,6 +1,6 @@
 use crate::{
-    dto::dto::{BillsDTO, UserDTO},
-    entities::{bills::Model as Bill, user::Model as User},
+    dto::dto::{BilleeDTO, BillsDTO, UserDTO},
+    entities::{billee::Model as Billee, bills::Model as Bill, user::Model as User},
 };
 
 pub fn user_to_userdto(user: &User) -> UserDTO {
@@ -22,6 +22,18 @@ pub fn bill_to_billdto(bill: &Bill) -> BillsDTO {
         status: bill.clone().status,
         category: bill.clone().category,
         created_at: bill.clone().created_at.to_string(),
-        due_date: bill.clone().due_date.to_string()
+        due_date: bill.clone().due_date.to_string(),
+    }
+}
+
+pub fn billee_to_billeedto(billee: &Billee) -> BilleeDTO {
+    BilleeDTO {
+        name: billee.clone().name,
+        percentage: billee.clone().percentage,
+        amount_due: billee.clone().amount_due,
+        amount_paid: billee.clone().amount_paid,
+        status: billee.clone().status,
+        user_id: billee.clone().user_id,
+        bill_id: billee.clone().bill_id,
     }
 }

@@ -9,6 +9,7 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, Qu
 use serde::{Deserialize, Serialize};
 
 use crate::dto::dto::*;
+use crate::dto::requests::{UserLoginRequest, UserRegisterRequest};
 use crate::entities::user::{self, ActiveModel as User};
 use crate::entities::user::Entity as UserDB;
 use crate::errors::error::AppError;

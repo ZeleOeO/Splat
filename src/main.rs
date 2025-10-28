@@ -1,8 +1,7 @@
-use axum::{extract::{ State}, response::{IntoResponse}, routing::{get, post}, Router};
-use sea_orm::DatabaseConnection;
+use axum::{response::{IntoResponse}, routing::{get, post}, Router};
 use tokio::net::TcpListener;
 
-use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, bills_service::{create_bill, join_bill}}};
+use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, billee_service::add_billee_to_bill, bills_service::{create_bill, join_bill}}};
 
 mod db;
 mod services;
@@ -25,6 +24,7 @@ async fn main() {
     .route("/profile", get(welcome_user))
     .route("/bills/new", post(create_bill))
     .route("/bills/join/{id}", post(join_bill))
+    .route("/bills/add-billee", post(add_billee_to_bill))
     .with_state(db);
 
     let addr = "0.0.0.0:6000";

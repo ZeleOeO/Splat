@@ -1,8 +1,8 @@
-use axum::{Json, debug_handler, extract::{Path, Query, State}, http::StatusCode, response::IntoResponse};
+use axum::{Json, debug_handler, extract::{Path, State}, http::StatusCode, response::IntoResponse};
 use chrono::{Duration, Utc};
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, EntityTrait};
 
-use crate::{dto::{dto::{ApiResponse, BillCreateRequest}, enums::BillsStatus}, entities::{bills::{ActiveModel as Bill, Entity as BillDB}, prelude::UserBillsJoined, user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::mapper::bill_to_billdto};
+use crate::{dto::{dto::ApiResponse, enums::BillsStatus, requests::BillCreateRequest}, entities::{bills::{ActiveModel as Bill, Entity as BillDB},  user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::mapper::bill_to_billdto};
 
 #[debug_handler]
 pub async fn create_bill(
