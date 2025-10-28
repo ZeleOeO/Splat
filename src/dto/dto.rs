@@ -40,13 +40,16 @@ pub struct BilleeDTO {
     pub bill_id: i32
 }
 
+pub struct BillsUsersDTO {
+    pub name: String,
+}
+
 impl<T> ApiResponse<T> {
     pub fn api_response(status: u16, messsage: &str, data: Option<T>) -> Self {
         Self { status, message: messsage.to_string(), data:  data}
 
     }
 }
-
 impl<T: Serialize> IntoResponse for ApiResponse<T> {
     fn into_response(self) -> Response {
         (StatusCode::OK, Json(self)).into_response()

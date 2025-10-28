@@ -1,6 +1,5 @@
 use serde::Deserialize;
 
-
 #[derive(Deserialize)]
 pub struct UserLoginRequest {
     pub username: String,
@@ -28,7 +27,8 @@ pub struct BillCreateRequest {
 
 #[derive(Deserialize)]
 pub struct BilleeCreateRequest {
-   pub name: String,
-   pub percentage: i32,
-   pub user_id: Option<i32>
+    pub bill_id: i32,
+    pub name: String,
+    pub percentage: i32,
+    pub user_id: Option<i32>,
 }

@@ -1,8 +1,8 @@
 use axum::{Json, debug_handler, extract::{Path, State}, http::StatusCode, response::IntoResponse};
 use chrono::{Duration, Utc};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, EntityTrait};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, EntityTrait, ModelTrait};
 
-use crate::{dto::{dto::ApiResponse, enums::BillsStatus, requests::BillCreateRequest}, entities::{bills::{ActiveModel as Bill, Entity as BillDB},  user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::mapper::bill_to_billdto};
+use crate::{dto::{dto::{ApiResponse, BilleeDTO, BillsDTO}, enums::BillsStatus, requests::BillCreateRequest}, entities::{billee::Entity as BilleeEntity, bills::{ActiveModel as Bill, Entity as BillDB}, user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::{bills_utils::find_bill_by_id, mapper::{bill_to_billdto, billee_to_billeedto}}};
 
 #[debug_handler]
 pub async fn create_bill(
@@ -34,21 +34,30 @@ pub async fn create_bill(
     Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Bill Created", Some(bill_to_billdto(&saved_bill))))
 }
 
-pub async fn join_bill(
-    auth: AuthUser,
+pub async fn get_billeesfrom_bill(
+    _: AuthUser,
     State(db): State<DatabaseConnection>,
     Path(id): Path<i32>
 ) -> Result<impl IntoResponse, AppError> {
-    let bills = BillDB::find_by_id(id).one(&db).await.unwrap();
+    let bill = find_bill_by_id(id, &db).await;
 
-    if let Some(bill) = bills {
-        let _ = BillsJoined {
-            user_id: Set(auth.0),
-            bills_joined_id: Set(bill.id)
-        }.insert(&db).await?;
+    let billees = bill.find_related(BilleeEntity).all(&db).await?;
 
-        return Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "User joined Bill", Some(bill_to_billdto(&bill))));
-    }
+    let billies_mapped: Vec<BilleeDTO> = billees.iter().map(|billee| {
+        billee_to_billeedto(billee)
+    }).collect();
 
-    Ok(ApiResponse::api_response(StatusCode::EXPECTATION_FAILED.as_u16(), "Failed to add user to bill", None))
+    Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Users Retrieved", Some(billies_mapped)))
+
+}
+
+pub async fn get_bill_by_id(
+    _: AuthUser,
+    Path(id): Path<i32>,
+    State(db): State<DatabaseConnection>
+) -> Result<impl IntoResponse, AppError> {
+    let bill = find_bill_by_id(id, &db).await;
+
+
+    Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Bill Created", Some(bill_to_billdto(&bill))))
 }
