@@ -1,7 +1,7 @@
 use axum::{Json, extract::{State}, http::StatusCode, response::IntoResponse};
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection};
 
-use crate::{dto::{dto::ApiResponse, enums::BilleeStatus, requests::BilleeCreateRequest}, entities::{billee::ActiveModel as Billee, user_bills_joined::{ActiveModel as UserBillsJoined}}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::{bills_utils::find_bill_by_id, mapper::billee_to_billeedto, user_utils::find_user_by_id}};
+use crate::{dto::{dto::ApiResponse, enums::BilleeStatus, requests::BilleeCreateRequest}, entities::{billee::ActiveModel as Billee}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::{bills_utils::find_bill_by_id, mapper::billee_to_billeedto, user_utils::find_user_by_id}};
 
 pub async fn add_billee_to_bill(
     _: AuthUser,

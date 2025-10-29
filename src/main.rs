@@ -1,7 +1,7 @@
 use axum::{response::{IntoResponse}, routing::{get, post}, Router};
 use tokio::net::TcpListener;
 
-use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill}}};
+use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id}}};
 
 mod db;
 mod services;
@@ -26,6 +26,7 @@ async fn main() {
     .route("/bills/add-billee", post(add_billee_to_bill))
     .route("/bills/billees/{id}", get(get_billeesfrom_bill))
     .route("/bills/{id}", get(get_bill_by_id))
+    .route("/bills/users", get(get_bills_by_user_id))
     .with_state(db);
 
     let addr = "0.0.0.0:6000";

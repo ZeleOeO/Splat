@@ -1,8 +1,8 @@
 use axum::{Json, debug_handler, extract::{Path, State}, http::StatusCode, response::IntoResponse};
 use chrono::{Duration, Utc};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, EntityTrait, ModelTrait};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection, ModelTrait};
 
-use crate::{dto::{dto::{ApiResponse, BilleeDTO, BillsDTO}, enums::BillsStatus, requests::BillCreateRequest}, entities::{billee::Entity as BilleeEntity, bills::{ActiveModel as Bill, Entity as BillDB}, user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::{bills_utils::find_bill_by_id, mapper::{bill_to_billdto, billee_to_billeedto}}};
+use crate::{dto::{dto::{ApiResponse, BilleeDTO, BillsDTO}, enums::BillsStatus, requests::BillCreateRequest}, entities::{billee::Entity as BilleeEntity, bills::ActiveModel as Bill, user_bills_joined::ActiveModel as BillsJoined}, errors::error::AppError, middleware::auth_middleware::AuthUser, utils::{bills_utils::{find_bill_by_id, find_bills_by_users}, mapper::{bill_to_billdto, billee_to_billeedto}}};
 
 #[debug_handler]
 pub async fn create_bill(
@@ -60,4 +60,17 @@ pub async fn get_bill_by_id(
 
 
     Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Bill Created", Some(bill_to_billdto(&bill))))
+}
+
+pub async fn get_bills_by_user_id(
+    auth: AuthUser,
+    State(db): State<DatabaseConnection>
+) -> Result<impl IntoResponse, AppError> {
+    let user_bills = find_bills_by_users(auth.0, &db).await?;
+
+    let user_bills_dto: Vec<BillsDTO> = user_bills.iter().map(|bill| {
+        bill_to_billdto(bill)
+    }).collect();
+
+    Ok(ApiResponse::api_response(StatusCode::OK.as_u16(), "Users Bills Retrieved", Some(user_bills_dto)))
 }
