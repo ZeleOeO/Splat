@@ -12,6 +12,7 @@ pub struct Model {
     pub email: Option<String>,
     pub first_name: String,
     pub last_name: String,
+    pub unique_id: String,
     pub created_at: DateTime,
     pub bills_created: Option<i32>,
     pub bills_joined: Option<i32>,

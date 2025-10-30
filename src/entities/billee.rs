@@ -16,6 +16,7 @@ pub struct Model {
     pub status: String,
     pub user_id: Option<i32>,
     pub bill_id: i32,
+    pub payment_details: Json,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

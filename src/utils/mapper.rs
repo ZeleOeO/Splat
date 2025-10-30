@@ -5,8 +5,8 @@ use crate::{
 
 pub fn user_to_userdto(user: &User) -> UserDTO {
     UserDTO {
+        unique_id: user.clone().unique_id,
         user_name: user.clone().user_name,
-        hashed_password: user.clone().hashed_password,
         email: user.clone().email,
         first_name: user.clone().first_name,
         last_name: user.clone().last_name,
@@ -16,6 +16,7 @@ pub fn user_to_userdto(user: &User) -> UserDTO {
 
 pub fn bill_to_billdto(bill: &Bill) -> BillsDTO {
     BillsDTO {
+        unique_id: bill.clone().unique_id,
         title: bill.clone().title,
         description: bill.clone().description,
         total_amount: bill.clone().total_amount,

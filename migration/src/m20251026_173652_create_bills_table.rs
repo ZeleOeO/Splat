@@ -17,6 +17,7 @@ impl MigrationTrait for Migration {
                     .col(string(Bills::Title))
                     .col(string_null(Bills::Description))
                     .col(integer(Bills::CreatorId))
+                    .col(string(Bills::UniqueId))
                     .col(integer(Bills::TotalAmount))
                     .col(string(Bills::Status))
                     .col(string(Bills::Category))
@@ -24,13 +25,24 @@ impl MigrationTrait for Migration {
                     .col(date_time(Bills::DueDate))
                     .foreign_key(
                         ForeignKey::create()
-                        .from(Bills::Table, Bills::CreatorId)
-                        .to(User::Table, User::Id)
-                        .on_delete(ForeignKeyAction::Cascade)
+                            .from(Bills::Table, Bills::CreatorId)
+                            .to(User::Table, User::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )
-            .await
+            .await;
+
+        manager.create_index(
+            Index::create()
+                .table(Bills::Table)
+                .name("idx-unique-id-bills")
+                .col(Bills::UniqueId)
+                .to_owned(),
+        )
+        .await?;
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -47,9 +59,10 @@ pub enum Bills {
     Title,
     Description,
     CreatorId,
+    UniqueId,
     TotalAmount,
     CreatedAt,
     DueDate,
     Status,
-    Category
+    Category,
 }

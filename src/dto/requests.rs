@@ -27,8 +27,8 @@ pub struct BillCreateRequest {
 
 #[derive(Deserialize)]
 pub struct BilleeCreateRequest {
-    pub bill_id: i32,
+    pub bill_id: String,
     pub name: String,
     pub percentage: i32,
-    pub user_id: Option<i32>,
+    pub user_id: Option<String>,
 }

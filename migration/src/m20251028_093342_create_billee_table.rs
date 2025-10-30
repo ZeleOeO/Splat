@@ -21,6 +21,7 @@ impl MigrationTrait for Migration {
                     .col(string(Billee::Status))
                     .col(integer_null(Billee::UserId))
                     .col(integer(Billee::BillId))
+                    .col(json(Billee::PaymentDetails))
                     .foreign_key(
                         ForeignKey::create()
                         .from(Billee::Table, Billee::UserId)
@@ -56,4 +57,5 @@ enum Billee {
     Status,
     UserId,
     BillId,
+    PaymentDetails
 }

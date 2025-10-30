@@ -17,12 +17,25 @@ impl MigrationTrait for Migration {
                     .col(string_null(User::Email))
                     .col(string(User::FirstName))
                     .col(string(User::LastName))
+                    .col(string(User::UniqueId))
                     .col(date_time(User::CreatedAt))
                     .col(integer_null(User::BillsCreated))
                     .col(integer_null(User::BillsJoined))
                     .to_owned(),
             )
-            .await
+            .await;
+
+        manager
+            .create_index(
+                Index::create()
+                .table(User::Table)
+                .name("idx-unique-id-user")
+                .col(User::UniqueId)
+                .to_owned(),
+            )
+            .await;
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -39,6 +52,7 @@ pub enum User {
     UserName,
     FirstName,
     LastName,
+    UniqueId,
     HashedPassword,
     Email,
     CreatedAt,

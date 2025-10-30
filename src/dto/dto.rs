@@ -10,8 +10,8 @@ pub struct ApiResponse<T> {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserDTO {
+    pub unique_id: String,
     pub user_name: String,
-    pub hashed_password: String,
     pub email: Option<String>,
     pub first_name: String,
     pub last_name: String,
@@ -20,6 +20,7 @@ pub struct UserDTO {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BillsDTO {
+    pub unique_id: String,
     pub title: String,
     pub description: Option<String>,
     pub total_amount: i32,
@@ -38,10 +39,6 @@ pub struct BilleeDTO {
     pub status: String,
     pub user_id: Option<i32>,
     pub bill_id: i32
-}
-
-pub struct BillsUsersDTO {
-    pub name: String,
 }
 
 impl<T> ApiResponse<T> {

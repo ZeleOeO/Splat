@@ -2,6 +2,7 @@ use axum::debug_handler;
 use axum::http::StatusCode;
 use axum::{Json, extract::State, response::IntoResponse};
 use bcrypt::{DEFAULT_COST, hash, verify};
+use uuid;
 use jsonwebtoken::errors::Error;
 use jsonwebtoken::{encode, decode, DecodingKey, EncodingKey, Header, Validation};
 use sea_orm::ActiveValue::Set;
@@ -79,10 +80,10 @@ pub async fn register_user(
         first_name: Set(payload.first_name),
         last_name: Set(payload.last_name),
         email: Set(payload.email),
+        unique_id: Set(uuid::Uuid::new_v4().to_string()),
         ..Default::default()
     };
 
-    // This is to prevent ownership being moved. Don't know if this is the right way to hold on
     let saved_user = user.clone().insert(&db).await?;
 
     Ok(ApiResponse::api_response(400, "User Created", Some(mapper::user_to_userdto(&saved_user))))
