@@ -1,7 +1,7 @@
 use axum::{response::{IntoResponse}, routing::{get, post}, Router};
 use tokio::net::TcpListener;
 
-use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id}}};
+use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, bank_service::populate_bank_table, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id}, wallet_service::create_wallet}};
 
 mod db;
 mod services;
@@ -19,14 +19,15 @@ async fn main() {
     let db = init_db().await;
 
     let app = Router::new()
-    .route("/register", post(register_user))
-    .route("/login", post(login_user))
-    .route("/profile", get(welcome_user))
+    .route("/auth/register", post(register_user))
+    .route("/auth/login", post(login_user))
     .route("/bills/new", post(create_bill))
     .route("/bills/add-billee", post(add_billee_to_bill))
     .route("/bills/billees/{id}", get(get_billeesfrom_bill))
     .route("/bills/{id}", get(get_bill_by_id))
     .route("/bills/users", get(get_bills_by_user_id))
+    .route("/admin/populate-bank", get(populate_bank_table))
+    .route("/wallet/new", post(create_wallet))
     .with_state(db);
 
     let addr = "0.0.0.0:6000";
@@ -34,7 +35,3 @@ async fn main() {
     axum::serve(listener, app.into_make_service()).await.unwrap();
 }
 
-#[axum::debug_handler]
-async fn welcome_user(auth: AuthUser) -> impl IntoResponse {
-    format!("Hello, user {}", auth.0)
-}

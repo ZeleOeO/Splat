@@ -2,7 +2,9 @@
 
 pub mod prelude;
 
+pub mod bank;
 pub mod billee;
 pub mod bills;
 pub mod user;
 pub mod user_bills_joined;
+pub mod wallet;

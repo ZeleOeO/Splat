@@ -26,6 +26,8 @@ pub enum Relation {
     Bills,
     #[sea_orm(has_many = "super::user_bills_joined::Entity")]
     UserBillsJoined,
+    #[sea_orm(has_many = "super::wallet::Entity")]
+    Wallet,
 }
 
 impl Related<super::billee::Entity> for Entity {
@@ -37,6 +39,12 @@ impl Related<super::billee::Entity> for Entity {
 impl Related<super::user_bills_joined::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::UserBillsJoined.def()
+    }
+}
+
+impl Related<super::wallet::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Wallet.def()
     }
 }
 

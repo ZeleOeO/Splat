@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct UserLoginRequest {
@@ -31,4 +31,12 @@ pub struct BilleeCreateRequest {
     pub name: String,
     pub percentage: i32,
     pub user_id: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct WalletCreateRequest {
+    pub account_number: String,
+    pub settlement_bank: String,
+    pub business_name: Option<String>,
+    pub percentage_charge: Option<i32>,
 }

@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiResponse<T> {
-    status: u16,
-    message: String,
-    data: Option<T>
+    pub status: u16,
+    pub message: String,
+    pub data: Option<T>
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,6 +40,25 @@ pub struct BilleeDTO {
     pub user_id: Option<i32>,
     pub bill_id: i32
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BankDTO {
+    pub name: String,
+    pub code: String,
+    pub country: String,
+    pub currency: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WalletDTO {
+    pub business_name: String,
+    pub account_number: String,
+    pub settlement_bank: String,
+    pub account_name: String,
+    pub currency: String,
+    pub subaccount_code: String
+}
+
 
 impl<T> ApiResponse<T> {
     pub fn api_response(status: u16, messsage: &str, data: Option<T>) -> Self {

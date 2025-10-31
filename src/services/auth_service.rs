@@ -71,6 +71,7 @@ pub async fn register_user(
         return Err(AppError::ExpectationFailed("Passwords don't match".into()));
     }
 
+
     let password_hash = hash_password(&payload.password);
 
     let user =  User {

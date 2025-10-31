@@ -6,7 +6,7 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        manager
+        let _ = manager
             .create_table(
                 Table::create()
                     .table(User::Table)
@@ -25,7 +25,7 @@ impl MigrationTrait for Migration {
             )
             .await;
 
-        manager
+        let _a = manager
             .create_index(
                 Index::create()
                 .table(User::Table)

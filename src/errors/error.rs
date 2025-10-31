@@ -4,7 +4,9 @@ use sea_orm::DbErr;
 
 use crate::dto::dto::ApiResponse;
 
+#[derive(Debug)]
 pub enum AppError {
+    RequestError(reqwest::Error),
     DbError(DbErr),
     Unauthorized,
     NotFound,
@@ -17,7 +19,8 @@ impl IntoResponse for AppError {
             AppError::DbError(err) => ApiResponse::api_response(StatusCode::INTERNAL_SERVER_ERROR.as_u16(), &err.to_string(), None::<String>).into_response(),
             AppError::Unauthorized => ApiResponse::api_response(StatusCode::UNAUTHORIZED.as_u16(), "Unauthorized", None::<String>).into_response(),
             AppError::NotFound => ApiResponse::api_response(StatusCode::NOT_FOUND.as_u16(), "Url Not Found", None::<String>).into_response(),
-            AppError::ExpectationFailed(err) => ApiResponse::api_response(StatusCode::BAD_REQUEST.as_u16(), &err.to_string(), None::<String>).into_response()
+            AppError::ExpectationFailed(err) => ApiResponse::api_response(StatusCode::BAD_REQUEST.as_u16(), &err.to_string(), None::<String>).into_response(),
+            AppError::RequestError(err) => ApiResponse::api_response(StatusCode::BAD_REQUEST.as_u16(), &err.to_string(), None::<String>).into_response()
         }
     }
 }
@@ -25,6 +28,12 @@ impl IntoResponse for AppError {
 impl From<DbErr> for AppError {
     fn from(err: DbErr) -> Self {
         AppError::DbError(err)
+    }
+}
+
+impl From<reqwest::Error> for AppError {
+    fn from(err: reqwest::Error) -> Self {
+        AppError::RequestError(err)
     }
 }
 

@@ -7,7 +7,7 @@ use crate::{
     errors::error::AppError,
     middleware::auth_middleware::AuthUser,
     utils::{
-        bills_utils::find_bill_by_id, mapper::billee_to_billeedto, user_utils::find_user_by_id,
+        bills_utils::find_bill_by_id, mapper::billee_to_billeedto, user_utils::find_user_by_unique_id,
     },
 };
 
@@ -19,7 +19,7 @@ pub async fn add_billee_to_bill(
     let userid = payload.user_id.unwrap_or("".to_string());
     let mut user_id: Option<i32> = None;
     if userid != "" {
-        user_id = Some(find_user_by_id(&userid, &db).await.id);
+        user_id = Some(find_user_by_unique_id(&userid, &db).await.id);
     }
 
     let option_bill = find_bill_by_id(&payload.bill_id, &db).await;
