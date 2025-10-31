@@ -3,8 +3,7 @@ use axum::http::StatusCode;
 use axum::{Json, extract::State, response::IntoResponse};
 use bcrypt::{DEFAULT_COST, hash, verify};
 use uuid;
-use jsonwebtoken::errors::Error;
-use jsonwebtoken::{encode, decode, DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{encode, EncodingKey, Header};
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
@@ -53,14 +52,14 @@ fn create_jwt(user_id: i32) -> String {
     .unwrap()
 }
 
-pub fn decode_jwt(token: &str) -> Result<Claims, Error> {
-    decode::<Claims>(
-        token,
-        &DecodingKey::from_secret(std::env::var("JWT_SECRET").unwrap().as_ref()),
-        &Validation::default(),
-    )
-    .map(|data| data.claims)
-}
+// pub fn decode_jwt(token: &str) -> Result<Claims, Error> {
+//     decode::<Claims>(
+//         token,
+//         &DecodingKey::from_secret(std::env::var("JWT_SECRET").unwrap().as_ref()),
+//         &Validation::default(),
+//     )
+//     .map(|data| data.claims)
+// }
 
 #[debug_handler]
 pub async fn register_user(

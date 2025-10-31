@@ -1,7 +1,7 @@
-use axum::{response::{IntoResponse}, routing::{get, post}, Router};
+use axum::{routing::{get, post}, Router};
 use tokio::net::TcpListener;
 
-use crate::{db::db::init_db, middleware::auth_middleware::AuthUser, services::{auth_service::{login_user, register_user}, bank_service::populate_bank_table, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id}, wallet_service::create_wallet}};
+use crate::{db::db::init_db, services::{auth_service::{login_user, register_user}, bank_service::populate_bank_table, billee_service::add_billee_to_bill, bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id}, wallet_service::create_wallet}};
 
 mod db;
 mod services;

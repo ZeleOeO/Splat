@@ -1,14 +1,12 @@
 use axum::{extract::State, response::IntoResponse};
 use reqwest::StatusCode;
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection};
-use tokio::{sync::futures, task::JoinSet};
+use tokio::{task::JoinSet};
 
 use crate::{
-    dto::dto::ApiResponse, entities::bank::{self, ActiveModel as BankModel}, errors::error::AppError,
+    dto::dto::ApiResponse, entities::bank::{ActiveModel as BankModel}, errors::error::AppError,
     middleware::client::fetch_banks_from_paystack,
 };
-
-pub async fn handle_user_payments() {}
 
 pub async fn populate_bank_table(
     State(db): State<DatabaseConnection>,
