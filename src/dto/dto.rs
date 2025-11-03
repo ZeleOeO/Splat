@@ -23,7 +23,7 @@ pub struct BillsDTO {
     pub unique_id: String,
     pub title: String,
     pub description: Option<String>,
-    pub total_amount: i32,
+    pub total_amount: f32,
     pub status: String,
     pub category: String,
     pub created_at: String,
@@ -38,7 +38,8 @@ pub struct BilleeDTO {
     pub amount_paid: f64,
     pub status: String,
     pub user_id: Option<i32>,
-    pub bill_id: i32
+    pub bill_id: i32,
+    pub payment_link: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -59,6 +60,12 @@ pub struct WalletDTO {
     pub subaccount_code: String
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TransactionInitializationDTO {
+    pub authorization_url: String,
+    pub access_code: String,
+    pub reference: String,
+}
 
 impl<T> ApiResponse<T> {
     pub fn api_response(status: u16, messsage: &str, data: Option<T>) -> Self {

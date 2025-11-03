@@ -2,7 +2,7 @@ use axum::{Json, extract::{State}, response::IntoResponse};
 use reqwest::StatusCode;
 use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection};
 
-use crate::{dto::{dto::{ApiResponse, WalletDTO}, requests::WalletCreateRequest}, entities::wallet::ActiveModel as Wallet, errors::error::AppError, middleware::{auth_middleware::AuthUser, client::fetch_verify_wallet_creation}, utils::user_utils::find_user_by_user_id};
+use crate::{dto::{dto::{ApiResponse, WalletDTO}, requests::WalletCreateRequest}, entities::wallet::ActiveModel as Wallet, errors::error::AppError, middleware::{auth_middleware::AuthUser, http_client::fetch_verify_wallet_creation}, utils::user_utils::find_user_by_user_id};
 
 pub async fn create_wallet(
     auth_user: AuthUser,

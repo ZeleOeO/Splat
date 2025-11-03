@@ -2,7 +2,7 @@
 
 use sea_orm::entity::prelude::*;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "bills")]
 pub struct Model {
     #[sea_orm(primary_key)]
@@ -11,7 +11,8 @@ pub struct Model {
     pub description: Option<String>,
     pub creator_id: i32,
     pub unique_id: String,
-    pub total_amount: i32,
+    #[sea_orm(column_type = "Float")]
+    pub total_amount: f32,
     pub status: String,
     pub category: String,
     pub created_at: DateTime,

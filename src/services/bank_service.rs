@@ -5,7 +5,7 @@ use tokio::{task::JoinSet};
 
 use crate::{
     dto::dto::ApiResponse, entities::bank::{ActiveModel as BankModel}, errors::error::AppError,
-    middleware::client::fetch_banks_from_paystack,
+    middleware::http_client::fetch_banks_from_paystack,
 };
 
 pub async fn populate_bank_table(

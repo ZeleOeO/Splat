@@ -36,5 +36,6 @@ pub fn billee_to_billeedto(billee: &Billee) -> BilleeDTO {
         status: billee.clone().status,
         user_id: billee.clone().user_id,
         bill_id: billee.clone().bill_id,
+        payment_link: billee.clone().payment_link,
     }
 }

@@ -20,6 +20,7 @@ migration = { path = "./migration"}
 chrono = { version = "0.4.42", features = ["serde"] }
 reqwest = { version = "0.12.24", features = ["json"] }
 once_cell = "1.21.3"
+futures = "0.3.31"
 
 [dev-dependencies]
 sea-orm-migration = "1.1.17"

@@ -18,7 +18,7 @@ impl MigrationTrait for Migration {
                     .col(string_null(Bills::Description))
                     .col(integer(Bills::CreatorId))
                     .col(string(Bills::UniqueId))
-                    .col(integer(Bills::TotalAmount))
+                    .col(float(Bills::TotalAmount))
                     .col(string(Bills::Status))
                     .col(string(Bills::Category))
                     .col(date_time(Bills::CreatedAt))

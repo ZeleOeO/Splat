@@ -20,7 +20,7 @@ pub struct UserRegisterRequest {
 pub struct BillCreateRequest {
     pub title: String,
     pub description: Option<String>,
-    pub total_amount: i32,
+    pub total_amount: f32,
     pub category: String,
     pub days_till_due: i64,
 }
@@ -31,6 +31,7 @@ pub struct BilleeCreateRequest {
     pub name: String,
     pub percentage: i32,
     pub user_id: Option<String>,
+    pub billee_email: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -39,4 +40,21 @@ pub struct WalletCreateRequest {
     pub settlement_bank: String,
     pub business_name: Option<String>,
     pub percentage_charge: Option<i32>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct TransactionInititializationRequest {
+    pub email: String,
+    pub amount: String,
+    pub subaccount: String,
+    pub bearer: String,
+    pub transaction_charge: i32,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SubaccountCreateRequest {
+    business_name: String,
+    settlemant_bank: String,
+    account_number: String,
+    percentage_charge: String,
 }
