@@ -50,11 +50,3 @@ pub struct TransactionInititializationRequest {
     pub bearer: String,
     pub transaction_charge: i32,
 }
-
-#[derive(Serialize, Deserialize)]
-pub struct SubaccountCreateRequest {
-    business_name: String,
-    settlemant_bank: String,
-    account_number: String,
-    percentage_charge: String,
-}

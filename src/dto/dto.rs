@@ -1,5 +1,6 @@
 use axum::{Json, http::{StatusCode}, response::{IntoResponse, Response}};
 use serde::{Deserialize, Serialize};
+use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiResponse<T> {
@@ -69,7 +70,8 @@ pub struct TransactionInitializationDTO {
 
 impl<T> ApiResponse<T> {
     pub fn api_response(status: u16, messsage: &str, data: Option<T>) -> Self {
-        Self { status, message: messsage.to_string(), data:  data}
+        info!("Message: {}", messsage.to_string());
+        return Self { status, message: messsage.to_string(), data:  data};
 
     }
 }

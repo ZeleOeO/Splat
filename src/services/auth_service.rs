@@ -2,6 +2,7 @@ use axum::debug_handler;
 use axum::http::StatusCode;
 use axum::{Json, extract::State, response::IntoResponse};
 use bcrypt::{DEFAULT_COST, hash, verify};
+use tracing::{info, debug, error};
 use uuid;
 use jsonwebtoken::{encode, EncodingKey, Header};
 use sea_orm::ActiveValue::Set;
@@ -66,12 +67,15 @@ pub async fn register_user(
     State(db): State<DatabaseConnection>,
     Json(payload): Json<UserRegisterRequest>,
 ) -> Result<impl IntoResponse, AppError> {
+    info!("Registering User");
     if payload.password != payload.repeat_password {
+        error!("Passwords Don't Match");
         return Err(AppError::ExpectationFailed("Passwords don't match".into()));
     }
 
 
     let password_hash = hash_password(&payload.password);
+
 
     let user =  User {
         user_name: Set(payload.username),
