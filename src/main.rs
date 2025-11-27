@@ -10,7 +10,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use crate::{
     db::db::init_db,
     services::{
-        auth_service::{login_user, register_user},
+        auth_service::{get_profile_info, login_user, refresh_token, register_user},
         bank_service::populate_bank_table,
         billee_service::add_billee_to_bill,
         bills_service::{create_bill, get_bill_by_id, get_billeesfrom_bill, get_bills_by_user_id},
@@ -43,6 +43,8 @@ async fn main() {
     let app = Router::new()
         .route("/auth/register", post(register_user))
         .route("/auth/login", post(login_user))
+        .route("/auth/refresh", post(refresh_token))
+        .route("/auth/me", get(get_profile_info))
         .route("/bills/new", post(create_bill))
         .route("/bills/add-billee", post(add_billee_to_bill))
         .route("/bills/billees/{id}", get(get_billeesfrom_bill))

@@ -50,3 +50,8 @@ pub struct TransactionInititializationRequest {
     pub bearer: String,
     pub transaction_charge: i32,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct RefreshTokenRequest {
+    pub refresh_token: String,
+}
